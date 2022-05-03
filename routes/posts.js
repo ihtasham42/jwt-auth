@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const postController = require("../controllers/postController");
-const { verifyToken } = require("../middleware/auth");
+const { verifyToken, authorizeUser } = require("../middleware/auth");
 
 router.route("/")
   .get(verifyToken, postController.getPosts)
@@ -8,7 +8,7 @@ router.route("/")
 
 router.route("/:id")
   .get(verifyToken, postController.getPost)
-  .delete(verifyToken, postController.deletePost)
-  .patch(verifyToken, postController.updatePost);
+  .delete([verifyToken, authorizeUser], postController.deletePost)
+  .patch([verifyToken, authorizeUser], postController.updatePost);
 
 module.exports = router;
