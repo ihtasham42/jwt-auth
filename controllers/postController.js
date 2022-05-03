@@ -39,7 +39,20 @@ const createPost = async (req, res) => {
 }
 
 const updatePost = (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { title, body } = req.body;
 
+    Post.updateOne(postId, { title, body }, () => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+
+      return res.status(200).send("Post updated");
+    });
+  } catch(err) {
+    return res.status(500).json(err);
+  }
 }
 
 const deletePost = (req, res) => {
@@ -59,7 +72,19 @@ const deletePost = (req, res) => {
 }
 
 const getPost = (req, res) => {
-  
+  try {
+    const postId = req.params.id;
+
+    const post = Post.findOne({ _id: postId });
+
+    if (!post) {
+      return res.status(400).send("Post not found")
+    }
+
+    return res.status(200).json(post);
+  } catch(err) {
+    return res.status(500).json(err);
+  }
 }
 
 module.exports = {
