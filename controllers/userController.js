@@ -16,7 +16,7 @@ const login = async (req, res) => {
 
     if (user && isPasswordValid) {
       const token = jwt.sign(
-        { id: user._id },
+        { id: user._id, isAdmin: user.isAdmin },
         process.env.TOKEN_KEY,
         {
           expiresIn: "2h"
@@ -52,7 +52,7 @@ const register = async (req, res) => {
     const user = await User.create({email, password: hashedPassword});
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, isAdmin: user.isAdmin },
       process.env.TOKEN_KEY,
       {
         expiresIn: "2h"

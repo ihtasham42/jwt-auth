@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Post = require("../models/Post");
 
 const paginate = (records, page) => {
@@ -24,7 +25,7 @@ const getPosts = (req, res) => {
 const createPost = async (req, res) => {
   try {
     const { title, content, userId } = req.body;
-    
+  
     const post = await Post.create({
       title,
       content,
@@ -32,7 +33,6 @@ const createPost = async (req, res) => {
     })
 
     return res.status(200).json(post);
-
   } catch(err) {
     return res.status(500).json(err);
   }
@@ -43,7 +43,19 @@ const updatePost = (req, res) => {
 }
 
 const deletePost = (req, res) => {
-  
+  try {
+    const postId = req.params.id;
+
+    Post.deleteOne({ _id: postId }, (err, _) => {
+      if (err) {
+        return res.status(400).json(err);
+      }
+
+      return res.status(200).send("Post deleted");
+    })
+  } catch(err) {
+    return res.status(500).json(err);
+  }
 }
 
 const getPost = (req, res) => {

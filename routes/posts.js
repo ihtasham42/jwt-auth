@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const postController = require("../controllers/postController");
-const { verifyToken, authorizeUser } = require("../middleware/auth");
+const { verifyToken } = require("../middleware/auth");
+const { authorizeUser } = require("../middleware/posts");
+
 
 router.route("/")
   .get(verifyToken, postController.getPosts)
