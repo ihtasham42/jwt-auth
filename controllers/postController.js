@@ -41,9 +41,9 @@ const createPost = async (req, res) => {
 const updatePost = (req, res) => {
   try {
     const postId = req.params.id;
-    const { title, body } = req.body;
+    const { title, body, user } = req.body;
 
-    Post.updateOne(postId, { title, body }, () => {
+    Post.updateOne({ _id: postId, poster: user._id }, { title, body }, () => {
       if (err) {
         return res.status(500).json(err);
       }
@@ -58,8 +58,9 @@ const updatePost = (req, res) => {
 const deletePost = (req, res) => {
   try {
     const postId = req.params.id;
+    const { user } = req.body
 
-    Post.deleteOne({ _id: postId }, (err, _) => {
+    Post.deleteOne({ _id: postId, poster: user._id }, (err, _) => {
       if (err) {
         return res.status(400).json(err);
       }
